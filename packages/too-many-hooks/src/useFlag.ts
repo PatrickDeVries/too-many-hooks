@@ -16,6 +16,7 @@ export type UseFlagReturn = [
      * @type {React.Dispatch<React.SetStateAction<boolean>>}
      */
     readonly set: React.Dispatch<React.SetStateAction<boolean>>
+
     /**
      * Sets the flag to true
      *
