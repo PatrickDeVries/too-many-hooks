@@ -26,8 +26,8 @@ jobs:
       IS_LABELED_RELEASE: contains(github.event.pull_request.labels.*.name, 'release')
       IS_LABELED_NON_LOGICAL: contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure')
     steps:
-      - run: echo "::set-output name=IS_LABELED_RELEASE::${{ toJSON(${{ env.IS_LABELED_RELEASE }}) }}"
-      - run: echo "::set-output name=IS_LABELED_NON_LOGICAL::${{ toJSON(${{ env.IS_LABELED_NON_LOGICAL }}) }}"
+      - run: echo "::set-output name=IS_LABELED_RELEASE::${{ toJSON(env.IS_LABELED_RELEASE) }}"
+      - run: echo "::set-output name=IS_LABELED_NON_LOGICAL::${{ toJSON(env.IS_LABELED_NON_LOGICAL) }}"
       # A step that does something is required for a job to be valid, so this does nothing but allows the job to exist
 
   check-pr:
