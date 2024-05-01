@@ -31,9 +31,9 @@ jobs:
       - run: echo "null"
       - id: check-labels
         run: |
-          $IS_LABELLED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
+          IS_LABELLED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
           echo "IS_LABELED_RELEASE=$IS_LABELED_RELEASE" >> "$GITHUB_OUTPUT"
-          $IS_LABELED_NON_LOGICAL=${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
+          IS_LABELED_NON_LOGICAL=${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
           echo "IS_LABELED_NON_LOGICAL=$IS_LABELED_NON_LOGICAL" >> "$GITHUB_OUTPUT"
         # A step that does something is required for a job to be valid, so this does nothing but allows the job to exist
 
