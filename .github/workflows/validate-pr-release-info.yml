@@ -25,7 +25,7 @@ jobs:
       - run: echo "null"
       - id: check-labels-step
         run: |
-          IS_LABELLED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
+          IS_LABELED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
           echo "IS_LABELED_RELEASE=$IS_LABELED_RELEASE" >> "$GITHUB_OUTPUT"
           IS_LABELED_NON_LOGICAL=${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
           echo "IS_LABELED_NON_LOGICAL=$IS_LABELED_NON_LOGICAL" >> "$GITHUB_OUTPUT"
@@ -35,7 +35,7 @@ jobs:
     name: Validate Release Label and Notes
     needs: [check-labels]
     runs-on: ubuntu-latest
-    # if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
+    if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
     steps:
       - run: echo "${{ needs.check-labels.outputs.IS_LABELED_RELEASE }}"
       - run: echo "${{ needs.check-labels.outputs.IS_LABELED_NON_LOGICAL }}"
