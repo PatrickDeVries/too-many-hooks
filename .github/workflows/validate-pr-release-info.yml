@@ -19,17 +19,15 @@ jobs:
     name: Check labels for release and non-logical labels
     runs-on: ubuntu-latest
     outputs: 
-        IS_LABELED_RELEASE: ${{ steps.check-labels-step.outputs.IS_LABELED_RELEASE }}
-        IS_LABELED_NON_LOGICAL: ${{  steps.check-labels-step.outputs.IS_LABELED_NON_LOGICAL  }}    
+        IS_LABELED_RELEASE: ${{ steps.check-labels.outputs.IS_LABELED_RELEASE }}
+        IS_LABELED_NON_LOGICAL: ${{  steps.check-labels.outputs.IS_LABELED_NON_LOGICAL  }}    
     steps:
-      - run: echo "null"
-      - id: check-labels-step
+      - id: check-labels
         run: |
           IS_LABELED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
           echo "IS_LABELED_RELEASE=$IS_LABELED_RELEASE" >> "$GITHUB_OUTPUT"
           IS_LABELED_NON_LOGICAL=${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
           echo "IS_LABELED_NON_LOGICAL=$IS_LABELED_NON_LOGICAL" >> "$GITHUB_OUTPUT"
-        # A step that does something is required for a job to be valid, so this does nothing but allows the job to exist
 
   check-pr:
     name: Validate Release Label and Notes
@@ -37,8 +35,6 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
     steps:
-      - run: echo "${{ needs.check-labels.outputs.IS_LABELED_RELEASE }}"
-      - run: echo "${{ needs.check-labels.outputs.IS_LABELED_NON_LOGICAL }}"
       - uses: actions/checkout@v2
       - uses: jefflinse/pr-semver-bump@v1
         name: Validate Pull Request Metadata
