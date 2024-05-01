@@ -33,7 +33,7 @@ jobs:
     name: Validate Release Label and Notes
     needs: [get-env-vars]
     runs-on: ubuntu-latest
-    if: ${{ fromJSON(needs.get-env-vars.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL) }}
+    if: ${{ needs.get-env-vars.outputs.IS_LABELED_RELEASE || !needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL }}
     steps:
       - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_RELEASE }}"
       - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL }}"
