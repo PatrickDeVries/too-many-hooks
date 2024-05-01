@@ -25,7 +25,7 @@ jobs:
       - id: check-labels
         name: Check labels and update outputs
         run: |
-          IS_LABELED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'release') }}
+          IS_LABELED_RELEASE=${{ contains(github.event.pull_request.labels.*.name, 'patch release') || contains(github.event.pull_request.labels.*.name, 'minor release') || contains(github.event.pull_request.labels.*.name, 'major release') }}
           echo "IS_LABELED_RELEASE=$IS_LABELED_RELEASE" >> "$GITHUB_OUTPUT"
           IS_LABELED_NON_LOGICAL=${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
           echo "IS_LABELED_NON_LOGICAL=$IS_LABELED_NON_LOGICAL" >> "$GITHUB_OUTPUT"
