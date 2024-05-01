@@ -25,7 +25,7 @@ jobs:
     outputs: 
         IS_LABELED_RELEASE: ${{ env.IS_LABELED_RELEASE }}
         IS_LABELED_NON_LOGICAL: ${{ env.IS_LABELED_NON_LOGICAL }}  
-        IS_LABELED_RELEASE2: ${{ steps.check-release-labels,outputs.IS_LABELED_RELEASE }}
+        IS_LABELED_RELEASE2: ${{ steps.check-release-labels.outputs.IS_LABELED_RELEASE }}
         IS_LABELED_NON_LOGICAL2: ${{  steps.check-non-logical-labels.outputs.IS_LABELED_NON_LOGICAL  }}    
     steps:
       - run: echo "null"
