@@ -34,10 +34,11 @@ jobs:
     name: Validate Release Label and Notes
     needs: [check-labels]
     runs-on: ubuntu-latest
-    if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
     steps:
       - uses: actions/checkout@v2
+        if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
       - uses: jefflinse/pr-semver-bump@v1
+        if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
         name: Validate Pull Request Metadata
         with:
           mode: validate
