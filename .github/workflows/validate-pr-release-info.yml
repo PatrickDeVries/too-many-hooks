@@ -14,19 +14,13 @@ on:
     paths:
       - "packages/too-many-hooks/**.ts"
 
-env: 
-  IS_LABELED_RELEASE: ${{ contains(github.event.pull_request.labels.*.name, 'release') }}
-  IS_LABELED_NON_LOGICAL: ${{ contains(github.event.pull_request.labels.*.name, 'tooling') || contains(github.event.pull_request.labels.*.name, 'documentation') || contains(github.event.pull_request.labels.*.name, 'restructure') }}
-
 jobs:
-  get-env-vars:
-    name: Load Environment Vars Into Outputs
+  check-labels:
+    name: Check labels for release and non-logical labels
     runs-on: ubuntu-latest
     outputs: 
-        IS_LABELED_RELEASE: ${{ env.IS_LABELED_RELEASE }}
-        IS_LABELED_NON_LOGICAL: ${{ env.IS_LABELED_NON_LOGICAL }}  
-        IS_LABELED_RELEASE2: ${{ steps.check-labels.outputs.IS_LABELED_RELEASE }}
-        IS_LABELED_NON_LOGICAL2: ${{  steps.check-labels.outputs.IS_LABELED_NON_LOGICAL  }}    
+        IS_LABELED_RELEASE: ${{ steps.check-labels.outputs.IS_LABELED_RELEASE }}
+        IS_LABELED_NON_LOGICAL: ${{  steps.check-labels.outputs.IS_LABELED_NON_LOGICAL  }}    
     steps:
       - run: echo "null"
       - id: check-labels
@@ -39,14 +33,12 @@ jobs:
 
   check-pr:
     name: Validate Release Label and Notes
-    needs: [get-env-vars]
+    needs: [check-labels]
     runs-on: ubuntu-latest
-    if: ${{ fromJSON(needs.get-env-vars.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL) }}
+    if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
     steps:
-      - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_RELEASE }}"
-      - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL }}"
-      - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_RELEASE2 }}"
-      - run: echo "${{ needs.get-env-vars.outputs.IS_LABELED_NON_LOGICAL2 }}"
+      - run: echo "${{ needs.check-labels.outputs.IS_LABELED_RELEASE }}"
+      - run: echo "${{ needs.check-labels.outputs.IS_LABELED_NON_LOGICAL }}"
       - uses: actions/checkout@v2
       - uses: jefflinse/pr-semver-bump@v1
         name: Validate Pull Request Metadata
