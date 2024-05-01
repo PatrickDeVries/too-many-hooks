@@ -35,7 +35,7 @@ jobs:
     name: Validate Release Label and Notes
     needs: [check-labels]
     runs-on: ubuntu-latest
-    if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
+    # if: ${{ fromJSON(needs.check-labels.outputs.IS_LABELED_RELEASE) || !fromJSON(needs.check-labels.outputs.IS_LABELED_NON_LOGICAL) }}
     steps:
       - run: echo "${{ needs.check-labels.outputs.IS_LABELED_RELEASE }}"
       - run: echo "${{ needs.check-labels.outputs.IS_LABELED_NON_LOGICAL }}"
